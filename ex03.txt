@@ -1,0 +1,327 @@
+-- Gerado por Oracle SQL Developer Data Modeler 23.1.0.087.0806
+--   em:        2024-09-25 09:22:33 BRT
+--   site:      Oracle Database 11g
+--   tipo:      Oracle Database 11g
+
+
+
+-- predefined type, no DDL - MDSYS.SDO_GEOMETRY
+
+-- predefined type, no DDL - XMLTYPE
+
+CREATE TABLE comodo (
+    numero                      INTEGER NOT NULL,
+    tipo_comodo_id_tipo         INTEGER NOT NULL,
+    situacao_comodo_id_situacao INTEGER NOT NULL
+);
+
+ALTER TABLE comodo
+    ADD CONSTRAINT comodo_pk PRIMARY KEY ( numero,
+                                           tipo_comodo_id_tipo,
+                                           situacao_comodo_id_situacao );
+
+CREATE TABLE enfermeiro (
+    registro_cre INTEGER NOT NULL
+);
+
+ALTER TABLE enfermeiro ADD CONSTRAINT enfermeiro_pk PRIMARY KEY ( registro_cre );
+
+CREATE TABLE funcionario (
+    id_funcionario          INTEGER NOT NULL,
+    nome                    VARCHAR2 
+--  ERROR: VARCHAR2 size not specified 
+     NOT NULL,
+    endereco                VARCHAR2 
+--  ERROR: VARCHAR2 size not specified 
+     NOT NULL,
+    celular                 VARCHAR2 
+--  ERROR: VARCHAR2 size not specified 
+     NOT NULL,
+    medico_registro_crm_1   INTEGER NOT NULL,
+    enfermeiro_registro_cre INTEGER NOT NULL
+);
+
+ALTER TABLE funcionario ADD CONSTRAINT funcionario_pk PRIMARY KEY ( id_funcionario,
+                                                                    medico_registro_crm_1 );
+
+CREATE TABLE leito (
+    id_leito                                    INTEGER NOT NULL, 
+--  ERROR: Column name length exceeds maximum allowed length(30) 
+    leito_situacao_leito_situacao_id            INTEGER NOT NULL,
+    paciente_paciente_id                        NUMBER NOT NULL,
+    comodo_numero                               INTEGER NOT NULL,
+    comodo_tipo_comodo_id_tipo                  INTEGER NOT NULL, 
+--  ERROR: Column name length exceeds maximum allowed length(30) 
+    comodo_situacao_comodo_id_situacao          INTEGER NOT NULL,
+    paciente_medico_registro_crm_1              INTEGER NOT NULL, 
+--  ERROR: Column name length exceeds maximum allowed length(30) 
+    paciente_plano_conveniado_cod_plano         INTEGER NOT NULL,
+    paciente_id_paciente                        INTEGER NOT NULL,
+    paciente_comodo_numero                      INTEGER NOT NULL, 
+--  ERROR: Column name length exceeds maximum allowed length(30) 
+    paciente_comodo_tipo_comodo_id_tipo         INTEGER NOT NULL, 
+--  ERROR: Column name length exceeds maximum allowed length(30) 
+    paciente_comodo_situacao_comodo_id_situacao INTEGER NOT NULL
+);
+
+CREATE UNIQUE INDEX leito__idx ON
+    leito (
+        paciente_paciente_id
+    ASC );
+
+CREATE UNIQUE INDEX leito__idxv1 ON
+    leito (
+        paciente_medico_registro_crm_1
+    ASC,
+        paciente_plano_conveniado_cod_plano
+    ASC );
+
+CREATE UNIQUE INDEX leito__idxv2 ON
+    leito (
+        paciente_medico_registro_crm_1
+    ASC,
+        paciente_plano_conveniado_cod_plano
+    ASC,
+        paciente_id_paciente
+    ASC,
+        paciente_comodo_numero
+    ASC,
+        paciente_comodo_tipo_comodo_id_tipo
+    ASC,
+        paciente_comodo_situacao_comodo_id_situacao
+    ASC );
+
+ALTER TABLE leito
+    ADD CONSTRAINT leito_pk PRIMARY KEY ( id_leito,
+                                          leito_situacao_leito_situacao_id,
+                                          comodo_numero,
+                                          comodo_tipo_comodo_id_tipo,
+                                          comodo_situacao_comodo_id_situacao );
+
+CREATE TABLE leito_situacao (
+    leito_situacao_id INTEGER NOT NULL,
+    ocupacao          INTEGER NOT NULL
+);
+
+ALTER TABLE leito_situacao ADD CONSTRAINT leito_situacao_pk PRIMARY KEY ( leito_situacao_id );
+
+CREATE TABLE medico (
+    registro_crm_1 INTEGER NOT NULL,
+    especialidade  VARCHAR2 
+--  ERROR: VARCHAR2 size not specified 
+     NOT NULL
+);
+
+ALTER TABLE medico ADD CONSTRAINT medico_pk PRIMARY KEY ( registro_crm_1 );
+
+CREATE TABLE paciente (
+    id_paciente                        INTEGER NOT NULL,
+    nome                               VARCHAR2 
+--  ERROR: VARCHAR2 size not specified 
+     NOT NULL,
+    nascimento                         VARCHAR2 
+--  ERROR: VARCHAR2 size not specified 
+     NOT NULL,
+    sexo                               VARCHAR2 
+--  ERROR: VARCHAR2 size not specified 
+     NOT NULL,
+    paciente_id                        NUMBER NOT NULL,
+    medico_registro_crm_1              INTEGER NOT NULL,
+    plano_conveniado_cod_plano         INTEGER NOT NULL,
+    comodo_numero                      INTEGER NOT NULL,
+    comodo_tipo_comodo_id_tipo         INTEGER NOT NULL, 
+--  ERROR: Column name length exceeds maximum allowed length(30) 
+    comodo_situacao_comodo_id_situacao INTEGER NOT NULL
+);
+
+--  ERROR: PK name length exceeds maximum allowed length(30) 
+ALTER TABLE paciente
+    ADD CONSTRAINT paciente_medico_registro_crm_1_plano_conveniado_cod_plano_un PRIMARY KEY ( medico_registro_crm_1,
+                                                                                              plano_conveniado_cod_plano,
+                                                                                              id_paciente,
+                                                                                              comodo_numero,
+                                                                                              comodo_tipo_comodo_id_tipo,
+                                                                                              comodo_situacao_comodo_id_situacao );
+
+ALTER TABLE paciente ADD CONSTRAINT paciente_pk UNIQUE ( paciente_id );
+
+CREATE TABLE plano_conveniado (
+    cod_plano         INTEGER NOT NULL,
+    nome_plano        VARCHAR2 
+--  ERROR: VARCHAR2 size not specified 
+     NOT NULL,
+    data_internamento DATE NOT NULL,
+    data_saida        DATE NOT NULL
+);
+
+ALTER TABLE plano_conveniado ADD CONSTRAINT plano_conveniado_pk PRIMARY KEY ( cod_plano );
+
+CREATE TABLE relation_10 (
+    enfermeiro_registro_cre            INTEGER NOT NULL,
+    comodo_numero                      INTEGER NOT NULL,
+    comodo_tipo_comodo_id_tipo         INTEGER NOT NULL, 
+--  ERROR: Column name length exceeds maximum allowed length(30) 
+    comodo_situacao_comodo_id_situacao INTEGER NOT NULL
+);
+
+ALTER TABLE relation_10
+    ADD CONSTRAINT relation_10_pk PRIMARY KEY ( enfermeiro_registro_cre,
+                                                comodo_numero,
+                                                comodo_tipo_comodo_id_tipo,
+                                                comodo_situacao_comodo_id_situacao );
+
+CREATE TABLE relation_6 (
+    medico_id_medico     INTEGER NOT NULL,
+    paciente_paciente_id NUMBER NOT NULL
+);
+
+ALTER TABLE relation_6 ADD CONSTRAINT relation_6_pk PRIMARY KEY ( medico_id_medico,
+                                                                  paciente_paciente_id );
+
+CREATE TABLE situacao_comodo (
+    id_situacao INTEGER NOT NULL,
+    situacao    VARCHAR2 
+--  ERROR: VARCHAR2 size not specified 
+     NOT NULL
+);
+
+ALTER TABLE situacao_comodo ADD CONSTRAINT situacao_comodo_pk PRIMARY KEY ( id_situacao );
+
+CREATE TABLE tipo_comodo (
+    id_tipo      INTEGER NOT NULL,
+    tipo         VARCHAR2 
+--  ERROR: VARCHAR2 size not specified 
+     NOT NULL,
+    quant_leitos INTEGER NOT NULL
+);
+
+ALTER TABLE tipo_comodo ADD CONSTRAINT tipo_comodo_pk PRIMARY KEY ( id_tipo );
+
+ALTER TABLE comodo
+    ADD CONSTRAINT comodo_situacao_comodo_fk FOREIGN KEY ( situacao_comodo_id_situacao )
+        REFERENCES situacao_comodo ( id_situacao );
+
+ALTER TABLE comodo
+    ADD CONSTRAINT comodo_tipo_comodo_fk FOREIGN KEY ( tipo_comodo_id_tipo )
+        REFERENCES tipo_comodo ( id_tipo );
+
+ALTER TABLE funcionario
+    ADD CONSTRAINT funcionario_enfermeiro_fk FOREIGN KEY ( enfermeiro_registro_cre )
+        REFERENCES enfermeiro ( registro_cre );
+
+ALTER TABLE funcionario
+    ADD CONSTRAINT funcionario_medico_fk FOREIGN KEY ( medico_registro_crm_1 )
+        REFERENCES medico ( registro_crm_1 );
+
+ALTER TABLE leito
+    ADD CONSTRAINT leito_comodo_fk FOREIGN KEY ( comodo_numero,
+                                                 comodo_tipo_comodo_id_tipo,
+                                                 comodo_situacao_comodo_id_situacao )
+        REFERENCES comodo ( numero,
+                            tipo_comodo_id_tipo,
+                            situacao_comodo_id_situacao );
+
+ALTER TABLE leito
+    ADD CONSTRAINT leito_leito_situacao_fk FOREIGN KEY ( leito_situacao_leito_situacao_id )
+        REFERENCES leito_situacao ( leito_situacao_id );
+
+ALTER TABLE leito
+    ADD CONSTRAINT leito_paciente_fk FOREIGN KEY ( paciente_medico_registro_crm_1,
+                                                   paciente_plano_conveniado_cod_plano,
+                                                   paciente_id_paciente,
+                                                   paciente_comodo_numero,
+                                                   paciente_comodo_tipo_comodo_id_tipo,
+                                                   paciente_comodo_situacao_comodo_id_situacao )
+        REFERENCES paciente ( paciente_id );
+
+ALTER TABLE paciente
+    ADD CONSTRAINT paciente_comodo_fk FOREIGN KEY ( comodo_numero,
+                                                    comodo_tipo_comodo_id_tipo,
+                                                    comodo_situacao_comodo_id_situacao )
+        REFERENCES comodo ( numero,
+                            tipo_comodo_id_tipo,
+                            situacao_comodo_id_situacao );
+
+ALTER TABLE paciente
+    ADD CONSTRAINT paciente_medico_fk FOREIGN KEY ( medico_registro_crm_1 )
+        REFERENCES medico ( registro_crm_1 );
+
+ALTER TABLE paciente
+    ADD CONSTRAINT paciente_plano_conveniado_fk FOREIGN KEY ( plano_conveniado_cod_plano )
+        REFERENCES plano_conveniado ( cod_plano );
+
+ALTER TABLE relation_10
+    ADD CONSTRAINT relation_10_comodo_fk FOREIGN KEY ( comodo_numero,
+                                                       comodo_tipo_comodo_id_tipo,
+                                                       comodo_situacao_comodo_id_situacao )
+        REFERENCES comodo ( numero,
+                            tipo_comodo_id_tipo,
+                            situacao_comodo_id_situacao );
+
+ALTER TABLE relation_10
+    ADD CONSTRAINT relation_10_enfermeiro_fk FOREIGN KEY ( enfermeiro_registro_cre )
+        REFERENCES enfermeiro ( registro_cre );
+
+ALTER TABLE relation_6
+    ADD CONSTRAINT relation_6_medico_fk FOREIGN KEY ( medico_id_medico )
+        REFERENCES medico ( registro_crm_1 );
+
+ALTER TABLE relation_6
+    ADD CONSTRAINT relation_6_paciente_fk FOREIGN KEY ( paciente_paciente_id )
+        REFERENCES paciente ( paciente_id );
+
+CREATE SEQUENCE paciente_paciente_id_seq START WITH 1 NOCACHE ORDER;
+
+CREATE OR REPLACE TRIGGER paciente_paciente_id_trg BEFORE
+    INSERT ON paciente
+    FOR EACH ROW
+    WHEN ( new.paciente_id IS NULL )
+BEGIN
+    :new.paciente_id := paciente_paciente_id_seq.nextval;
+END;
+/
+
+
+
+-- Relatório do Resumo do Oracle SQL Developer Data Modeler: 
+-- 
+-- CREATE TABLE                            12
+-- CREATE INDEX                             3
+-- ALTER TABLE                             27
+-- CREATE VIEW                              0
+-- ALTER VIEW                               0
+-- CREATE PACKAGE                           0
+-- CREATE PACKAGE BODY                      0
+-- CREATE PROCEDURE                         0
+-- CREATE FUNCTION                          0
+-- CREATE TRIGGER                           1
+-- ALTER TRIGGER                            0
+-- CREATE COLLECTION TYPE                   0
+-- CREATE STRUCTURED TYPE                   0
+-- CREATE STRUCTURED TYPE BODY              0
+-- CREATE CLUSTER                           0
+-- CREATE CONTEXT                           0
+-- CREATE DATABASE                          0
+-- CREATE DIMENSION                         0
+-- CREATE DIRECTORY                         0
+-- CREATE DISK GROUP                        0
+-- CREATE ROLE                              0
+-- CREATE ROLLBACK SEGMENT                  0
+-- CREATE SEQUENCE                          1
+-- CREATE MATERIALIZED VIEW                 0
+-- CREATE MATERIALIZED VIEW LOG             0
+-- CREATE SYNONYM                           0
+-- CREATE TABLESPACE                        0
+-- CREATE USER                              0
+-- 
+-- DROP TABLESPACE                          0
+-- DROP DATABASE                            0
+-- 
+-- REDACTION POLICY                         0
+-- 
+-- ORDS DROP SCHEMA                         0
+-- ORDS ENABLE SCHEMA                       0
+-- ORDS ENABLE OBJECT                       0
+-- 
+-- ERRORS                                  18
+-- WARNINGS                                 0
