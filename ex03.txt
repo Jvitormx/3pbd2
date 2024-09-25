@@ -1,5 +1,5 @@
 -- Gerado por Oracle SQL Developer Data Modeler 23.1.0.087.0806
---   em:        2024-09-25 09:22:33 BRT
+--   em:        2024-09-25 09:55:17 BRT
 --   site:      Oracle Database 11g
 --   tipo:      Oracle Database 11g
 
@@ -21,7 +21,8 @@ ALTER TABLE comodo
                                            situacao_comodo_id_situacao );
 
 CREATE TABLE enfermeiro (
-    registro_cre INTEGER NOT NULL
+    registro_cre            INTEGER NOT NULL,
+    enfermeiro_registro_cre INTEGER
 );
 
 ALTER TABLE enfermeiro ADD CONSTRAINT enfermeiro_pk PRIMARY KEY ( registro_cre );
@@ -134,14 +135,13 @@ CREATE TABLE paciente (
     comodo_situacao_comodo_id_situacao INTEGER NOT NULL
 );
 
---  ERROR: PK name length exceeds maximum allowed length(30) 
 ALTER TABLE paciente
-    ADD CONSTRAINT paciente_medico_registro_crm_1_plano_conveniado_cod_plano_un PRIMARY KEY ( medico_registro_crm_1,
-                                                                                              plano_conveniado_cod_plano,
-                                                                                              id_paciente,
-                                                                                              comodo_numero,
-                                                                                              comodo_tipo_comodo_id_tipo,
-                                                                                              comodo_situacao_comodo_id_situacao );
+    ADD CONSTRAINT paciente_pkv1 PRIMARY KEY ( medico_registro_crm_1,
+                                               plano_conveniado_cod_plano,
+                                               id_paciente,
+                                               comodo_numero,
+                                               comodo_tipo_comodo_id_tipo,
+                                               comodo_situacao_comodo_id_situacao );
 
 ALTER TABLE paciente ADD CONSTRAINT paciente_pk UNIQUE ( paciente_id );
 
@@ -204,6 +204,10 @@ ALTER TABLE comodo
 ALTER TABLE comodo
     ADD CONSTRAINT comodo_tipo_comodo_fk FOREIGN KEY ( tipo_comodo_id_tipo )
         REFERENCES tipo_comodo ( id_tipo );
+
+ALTER TABLE enfermeiro
+    ADD CONSTRAINT enfermeiro_enfermeiro_fk FOREIGN KEY ( enfermeiro_registro_cre )
+        REFERENCES enfermeiro ( registro_cre );
 
 ALTER TABLE funcionario
     ADD CONSTRAINT funcionario_enfermeiro_fk FOREIGN KEY ( enfermeiro_registro_cre )
@@ -287,7 +291,7 @@ END;
 -- 
 -- CREATE TABLE                            12
 -- CREATE INDEX                             3
--- ALTER TABLE                             27
+-- ALTER TABLE                             28
 -- CREATE VIEW                              0
 -- ALTER VIEW                               0
 -- CREATE PACKAGE                           0
@@ -323,5 +327,5 @@ END;
 -- ORDS ENABLE SCHEMA                       0
 -- ORDS ENABLE OBJECT                       0
 -- 
--- ERRORS                                  18
+-- ERRORS                                  17
 -- WARNINGS                                 0
